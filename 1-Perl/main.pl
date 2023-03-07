@@ -47,22 +47,29 @@ foreach my $aktualne_bialko (@tablica_wszystkich_nazw_bialek)
 
 
   open(my $out, ">", "wyniki/".$aktualne_bialko."_res.csv") or die "Can't create output file";
+  open(my $out_PL, ">", "wyniki/".$aktualne_bialko."_res-PL.csv") or die "Can't create output file";
 
   print $out $aktualne_bialko." ".$cala_sekwencja_bialka;
+  print $out_PL $aktualne_bialko." ".$cala_sekwencja_bialka;
 
-  for($i = 0; $i < length($cala_sekwencja_bialka) - 3; $i++) {
+  for($i = 0; $i < length($cala_sekwencja_bialka) - 4; $i++) {
     print $out "\n";
+    print $out_PL "\n";
     $czworka = substr($cala_sekwencja_bialka, $i, 4);
     if($linia = $bialka_hash{$czworka}){
       $linia =~ s/\t/,/g; # zamiana tabulatur na przecinki
       chomp($linia); # usuniecie nowej linii
       print $out $linia;
+      $linia =~ s/,/;/g;
+      print $out_PL $linia;
     } else {
       print $out $czworka;
+      print $out_PL $czworka;
     }
   }
 
   close $out or die "Output file not closed";
+  close $out_PL or die "Output file PL not closed";
 }
 
 print "Success";
