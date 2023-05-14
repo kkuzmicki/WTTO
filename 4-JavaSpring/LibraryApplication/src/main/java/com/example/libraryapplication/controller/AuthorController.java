@@ -4,10 +4,10 @@ import com.example.libraryapplication.api.model.AuthorDTO;
 import com.example.libraryapplication.api.model.AuthorListDTO;
 import com.example.libraryapplication.services.AuthorService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/author/")
@@ -19,15 +19,34 @@ public class AuthorController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable Long id){
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        return new ResponseEntity<AuthorDTO> (authorService.getAuthorById(id), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public AuthorDTO getAuthorById(@PathVariable Long id){
+        return authorService.getAuthorById(id);
     }
 
     @GetMapping("findByLastName")
-    public ResponseEntity<AuthorListDTO> getAuthorsByLastName(@RequestParam String name){
-        return new ResponseEntity<AuthorListDTO>(
-                new AuthorListDTO(authorService.getAuthorByLastName(name)), HttpStatus.OK
-        );
+    @ResponseStatus(HttpStatus.OK)
+    public List<AuthorDTO> getAuthorsByLastName(@RequestParam String name){
+        return authorService.getAuthorByLastName(name);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public AuthorDTO createNewAuthor(@RequestBody AuthorDTO authorDTO){
+        return authorService.createNewAuthor(authorDTO);
+    }
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthorDTO updateAuthor(@PathVariable Long id, @RequestBody AuthorDTO authorDTO){
+        return authorService.updateAuthor(id, authorDTO);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Void deleteAuthor(@PathVariable Long id){
+        authorService.deleteAuthorById(id);
+
+        return null;
     }
 }

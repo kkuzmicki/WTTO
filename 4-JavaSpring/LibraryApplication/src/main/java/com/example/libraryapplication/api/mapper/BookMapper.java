@@ -1,14 +1,15 @@
 package com.example.libraryapplication.api.mapper;
 
 import com.example.libraryapplication.api.model.AuthorDTO;
+import com.example.libraryapplication.api.model.BookDTO;
 import com.example.libraryapplication.domain.Author;
-import org.mapstruct.factory.Mappers;
+import com.example.libraryapplication.domain.Book;
 import org.mapstruct.Mapper;
+
 @Mapper(componentModel = "spring")
-public interface AuthorMapper {
+public interface BookMapper {
     //AuthorMapper INSTANCE = Mappers.getMapper(AuthorMapper.class);
+    BookDTO bookToBookDTO(Book book);
 
-    AuthorDTO authorToAuthorDTO(Author author);
-
-    Author authorDTOToAuthor(AuthorDTO authorDTO);
+    Book bookDTOToBook(BookDTO bookDTO);
 }

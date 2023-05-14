@@ -1,6 +1,8 @@
 package com.example.libraryapplication.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 @Entity
 public class Book {
@@ -17,25 +20,9 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    private String genre;
     private String publishYear;
-
-    public Book(Long id, String title, String genre, String publishYear, String publisher, Set<Author> authors) {
-        this.id = id;
-        this.title = title;
-        this.genre = genre;
-        this.publishYear = publishYear;
-        this.publisher = publisher;
-        this.authors = authors;
-    }
-
-    public Book(String title, String genre, String publishYear, String publisher, Set<Author> authors) {
-        this.title = title;
-        this.genre = genre;
-        this.publishYear = publishYear;
-        this.publisher = publisher;
-        this.authors = authors;
-    }
+    private String genre;
+    private String publisher;
 
     public Book(String title, String genre, String publishYear, String publisher) {
         this.title = title;
@@ -43,9 +30,8 @@ public class Book {
         this.publishYear = publishYear;
         this.publisher = publisher;
     }
-
-    private String publisher;
     @ManyToMany
+    @JsonIgnoreProperties("books")
     private Set<Author> authors = new HashSet<>();
 
     @Override
@@ -55,7 +41,7 @@ public class Book {
                 ", genre='" + genre + '\'' +
                 ", year='" + publishYear + '\'' +
                 ", publisher='" + publisher + '\'' +
-                ", authors=" + authors +
+                //", authors=" + authors +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.example.libraryapplication.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +24,9 @@ public class Author {
     private String lastName;
     private String dateOfBirth;
 
-    //@ManyToMany(mappedBy = "authors")
-    //private Set<Book> books = new HashSet<>();
+    @ManyToMany(mappedBy = "authors")
+    @JsonIgnoreProperties("authors")
+    private Set<Book> books = new HashSet<>();
 
 //    public Author(String firstName, String lastName, String dateOfBirth) {
 //        this.firstName = firstName;

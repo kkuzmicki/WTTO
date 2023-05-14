@@ -8,4 +8,10 @@ public interface AuthorService {
     List<AuthorDTO> getAllAuthors();
     AuthorDTO getAuthorById(Long id);
     List<AuthorDTO> getAuthorByLastName(String name);
+
+    AuthorDTO createNewAuthor(AuthorDTO authorDTO);
+
+    AuthorDTO updateAuthor(Long id, AuthorDTO authorDTO);
+
+    void deleteAuthorById(Long id);
 }
