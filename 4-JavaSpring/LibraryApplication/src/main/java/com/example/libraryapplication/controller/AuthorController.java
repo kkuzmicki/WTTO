@@ -1,10 +1,8 @@
 package com.example.libraryapplication.controller;
 
 import com.example.libraryapplication.api.model.AuthorDTO;
-import com.example.libraryapplication.api.model.AuthorListDTO;
 import com.example.libraryapplication.services.AuthorService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +19,15 @@ public class AuthorController {
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public AuthorDTO getAuthorById(@PathVariable Long id){
-        return authorService.getAuthorById(id);
+        AuthorDTO authorDTO = authorService.getAuthorById(id);
+        return authorDTO;
     }
 
     @GetMapping("findByLastName")
     @ResponseStatus(HttpStatus.OK)
     public List<AuthorDTO> getAuthorsByLastName(@RequestParam String name){
-        return authorService.getAuthorByLastName(name);
+
+        return authorService.getAuthorsByLastName(name);
     }
 
     @PostMapping
@@ -44,9 +44,8 @@ public class AuthorController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Void deleteAuthor(@PathVariable Long id){
+    public String deleteAuthor(@PathVariable Long id){
         authorService.deleteAuthorById(id);
-
-        return null;
+        return "author delete called";
     }
 }

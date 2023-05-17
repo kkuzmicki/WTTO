@@ -29,7 +29,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<AuthorDTO> getAuthorByLastName(String name) {
+    public List<AuthorDTO> getAuthorsByLastName(String name) {
         return authorRepository.getByLastName(name).stream().map(authorMapper::authorToAuthorDTO).collect(Collectors.toList());
     }
 

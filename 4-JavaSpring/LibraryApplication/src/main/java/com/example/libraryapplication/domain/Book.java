@@ -1,6 +1,8 @@
 package com.example.libraryapplication.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +32,8 @@ public class Book {
         this.publishYear = publishYear;
         this.publisher = publisher;
     }
-    @ManyToMany
+
+    @ManyToMany(cascade=CascadeType.REMOVE)
     @JsonIgnoreProperties("books")
     private Set<Author> authors = new HashSet<>();
 

@@ -7,7 +7,7 @@ import java.util.List;
 public interface AuthorService {
     List<AuthorDTO> getAllAuthors();
     AuthorDTO getAuthorById(Long id);
-    List<AuthorDTO> getAuthorByLastName(String name);
+    List<AuthorDTO> getAuthorsByLastName(String name);
 
     AuthorDTO createNewAuthor(AuthorDTO authorDTO);
 

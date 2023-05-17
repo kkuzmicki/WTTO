@@ -24,8 +24,7 @@ public class Author {
     private String lastName;
     private String dateOfBirth;
 
-    @ManyToMany(mappedBy = "authors")
-    @JsonIgnoreProperties("authors")
+    @ManyToMany(mappedBy = "authors", cascade=CascadeType.REMOVE)
     private Set<Book> books = new HashSet<>();
 
 //    public Author(String firstName, String lastName, String dateOfBirth) {
