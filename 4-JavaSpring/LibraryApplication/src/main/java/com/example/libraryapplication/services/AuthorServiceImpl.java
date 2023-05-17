@@ -11,13 +11,14 @@ import java.util.stream.Collectors;
 @Service
 public class AuthorServiceImpl implements AuthorService {
     AuthorRepository authorRepository;
+    AuthorMapper authorMapper;
+
 
     public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper) {
         this.authorRepository = authorRepository;
         this.authorMapper = authorMapper;
     }
 
-    AuthorMapper authorMapper;
     @Override
     public List<AuthorDTO> getAllAuthors() {
         return authorRepository.findAll().stream().map(authorMapper::authorToAuthorDTO).collect(Collectors.toList());
@@ -49,7 +50,6 @@ public class AuthorServiceImpl implements AuthorService {
         Author saveAuthor = authorRepository.save(author);
 
         return authorMapper.authorToAuthorDTO(saveAuthor);
-
     }
 
     @Override

@@ -34,7 +34,6 @@ public class Book {
     }
 
     @ManyToMany(cascade=CascadeType.REMOVE)
-    @JsonIgnoreProperties("books")
     private Set<Author> authors = new HashSet<>();
 
     @Override

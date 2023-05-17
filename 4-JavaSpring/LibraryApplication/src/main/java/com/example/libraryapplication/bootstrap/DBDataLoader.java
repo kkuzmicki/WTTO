@@ -37,14 +37,16 @@ public class DBDataLoader implements CommandLineRunner {
                 "Doubleday");
         king.getBooks().add(shining);
         shining.getAuthors().add(king);
-        authorRepository.save(king);
-        bookRepository.save(shining);
 
         Book it = new Book("It", "Horror", "1986",
                 "Doubleday");
-        king.getBooks().add(shining);
-        shining.getAuthors().add(king);
+        king.getBooks().add(it);
+        it.getAuthors().add(king);
+
+        authorRepository.save(king);
+        bookRepository.save(shining);
         bookRepository.save(it);
+
 
         Author orwell = new Author(3L, "George", "Orwell", "1903", new HashSet<>());
         Book farm = new Book("Animal Farm", "Political satire", "1945",

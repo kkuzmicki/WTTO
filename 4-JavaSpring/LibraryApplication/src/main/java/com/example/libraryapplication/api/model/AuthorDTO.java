@@ -16,7 +16,6 @@ public class AuthorDTO {
     private String firstName;
     private String lastName;
     private String dateOfBirth;
-
     @JsonIgnoreProperties("authors")
     private Set<Book> books = new HashSet<>();
 }
