@@ -1,4 +1,4 @@
-package com.example.libraryapplication.controller;
+package com.example.libraryapplication.controller.api;
 
 import com.example.libraryapplication.api.model.LibraryDTO;
 import com.example.libraryapplication.api.model.ReaderDTO;
