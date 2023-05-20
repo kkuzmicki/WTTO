@@ -43,7 +43,7 @@ public class BookController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteAuthor(@PathVariable Long id){
+    public String deleteBook(@PathVariable Long id){
         bookService.deleteBookById(id);
         return "book delete called";
     }

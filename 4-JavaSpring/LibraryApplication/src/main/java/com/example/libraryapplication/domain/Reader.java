@@ -14,20 +14,20 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 @Entity
-public class Library {
+public class Reader {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String city;
-    private String street;
-
-    public Library(String city, String street, Set<Reader> readers) {
-        this.city = city;
-        this.street = street;
-        this.readers = readers;
+    public Reader(String firstName, String lastName, Set<Library> libraries) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.libraries = libraries;
     }
 
-    @ManyToMany(mappedBy = "libraries", cascade=CascadeType.REMOVE)
-    private Set<Reader> readers = new HashSet<>();
+    private String firstName;
+    private String lastName;
+
+    @ManyToMany(cascade=CascadeType.REMOVE)
+    private Set<Library> libraries = new HashSet<>();
 }

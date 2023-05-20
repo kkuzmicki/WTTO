@@ -2,8 +2,12 @@ package com.example.libraryapplication.bootstrap;
 
 import com.example.libraryapplication.domain.Author;
 import com.example.libraryapplication.domain.Book;
+import com.example.libraryapplication.domain.Library;
+import com.example.libraryapplication.domain.Reader;
 import com.example.libraryapplication.repositories.AuthorRepository;
 import com.example.libraryapplication.repositories.BookRepository;
+import com.example.libraryapplication.repositories.LibraryRepository;
+import com.example.libraryapplication.repositories.ReaderRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +20,14 @@ public class DBDataLoader implements CommandLineRunner {
 
     AuthorRepository authorRepository;
     BookRepository bookRepository;
+    LibraryRepository libraryRepository;
+    ReaderRepository readerRepository;
 
-    public DBDataLoader(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public DBDataLoader(AuthorRepository authorRepository, BookRepository bookRepository, LibraryRepository libraryRepository, ReaderRepository readerRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.libraryRepository = libraryRepository;
+        this.readerRepository = readerRepository;
     }
 
     @Override
@@ -56,5 +64,30 @@ public class DBDataLoader implements CommandLineRunner {
         authorRepository.save(orwell);
         bookRepository.save(farm);
 
+        //=========================================
+
+        Library library1 = new Library("Katowice", "Francuska 3", new HashSet<>());
+        Library library2 = new Library("Katowice", "Chorzowska 13", new HashSet<>());
+        Library library3 = new Library("Sosnowiec", "Stawowa 5", new HashSet<>());
+
+        Reader nowak = new Reader("Adam", "Nowak", new HashSet<>());
+        Reader kowalski = new Reader("Jan", "Kowalski", new HashSet<>());
+        Reader grabski = new Reader("Andrzej", "Grabski", new HashSet<>());
+
+        nowak.getLibraries().add(library1);
+        kowalski.getLibraries().add(library1);
+        grabski.getLibraries().add(library1);
+
+        library1.getReaders().add(nowak);
+        library1.getReaders().add(kowalski);
+        library1.getReaders().add(grabski);
+
+        libraryRepository.save(library1);
+        readerRepository.save(nowak);
+        readerRepository.save(kowalski);
+        readerRepository.save(grabski);
+
+        libraryRepository.save(library2);
+        libraryRepository.save(library3);
     }
 }
