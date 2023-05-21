@@ -1,10 +1,15 @@
 package com.example.libraryapplication.controller;
 
+import com.example.libraryapplication.domain.Author;
+import com.example.libraryapplication.domain.Reader;
 import com.example.libraryapplication.repositories.LibraryRepository;
 import com.example.libraryapplication.repositories.ReaderRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Controller
 public class ReaderViewController {
@@ -33,5 +38,20 @@ public class ReaderViewController {
     public String deleteReader(@PathVariable("id") Long id) {
         readerRepository.deleteById(id);
         return "redirect:/reader";
+    }
+
+    @RequestMapping("/reader/{id}/libraries")
+    public String getReaderLibraries(Model model, @PathVariable("id") Long id) {
+        Optional<Reader> reader = readerRepository.findById(id);
+
+        if (reader.isPresent()) {
+            model.addAttribute("libraries", libraryRepository.getAllByReadersIsContaining(reader.get()));
+            model.addAttribute("filter", "reader: " + reader.get().getFirstName() + " " + reader.get().getLastName());
+        } else {
+            model.addAttribute("libraries", new ArrayList<>());
+            model.addAttribute("filter", "reader for this id doesn't exist");
+        }
+
+        return "library/list";
     }
 }
