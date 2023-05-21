@@ -1,13 +1,15 @@
 package com.example.libraryapplication.controller;
 
+import com.example.libraryapplication.api.mapper.LibraryMapper;
+import com.example.libraryapplication.api.model.AuthorDTO;
+import com.example.libraryapplication.api.model.LibraryDTO;
 import com.example.libraryapplication.domain.Author;
 import com.example.libraryapplication.domain.Library;
 import com.example.libraryapplication.repositories.LibraryRepository;
 import com.example.libraryapplication.repositories.ReaderRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -17,10 +19,12 @@ public class LibraryViewController {
 
     private ReaderRepository readerRepository;
     private LibraryRepository libraryRepository;
+    private LibraryMapper libraryMapper;
 
-    public LibraryViewController(ReaderRepository readerRepository, LibraryRepository libraryRepository) {
+    public LibraryViewController(ReaderRepository readerRepository, LibraryRepository libraryRepository, LibraryMapper libraryMapper) {
         this.readerRepository = readerRepository;
         this.libraryRepository = libraryRepository;
+        this.libraryMapper = libraryMapper;
     }
 
     @RequestMapping(value = {"/library", "/library/list"})
@@ -54,5 +58,27 @@ public class LibraryViewController {
         }
 
         return "reader/list";
+    }
+    @GetMapping
+    @RequestMapping("/library/new")
+    public String newLibrary(Model model){
+        model.addAttribute("library", new LibraryDTO());
+        return "library/addedit";
+    }
+
+    @PostMapping("library/")
+    public String saveOrUpdate(@ModelAttribute LibraryDTO libraryDTO){
+
+        Optional<Library> libraryOptional = libraryRepository.getFirstByStreetAndCity(libraryDTO.getStreet(), libraryDTO.getCity());
+
+        if (!libraryOptional.isPresent()) {
+            Library detachedLibrary = libraryMapper.libraryDTOToLibrary(libraryDTO);
+            Library savedLibrary = libraryRepository.save(detachedLibrary);
+            return "redirect:/library/" + savedLibrary.getId() + "/show";
+        } else {
+            //TODO: error message to template
+            System.out.println("Sorry, there's such library in db");
+            return "redirect:/library/" + libraryOptional.get().getId() + "/show";
+        }
     }
 }

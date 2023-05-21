@@ -1,13 +1,15 @@
 package com.example.libraryapplication.controller;
 
+import com.example.libraryapplication.api.mapper.BookMapper;
+import com.example.libraryapplication.api.model.AuthorDTO;
+import com.example.libraryapplication.api.model.BookDTO;
 import com.example.libraryapplication.domain.Author;
 import com.example.libraryapplication.domain.Book;
 import com.example.libraryapplication.repositories.BookRepository;
 import com.example.libraryapplication.repositories.AuthorRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -17,10 +19,12 @@ public class BookViewController {
 
     private AuthorRepository authorRepository;
     private BookRepository bookRepository;
+    private BookMapper bookMapper;
 
-    public BookViewController(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public BookViewController(AuthorRepository authorRepository, BookRepository bookRepository, BookMapper bookMapper) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.bookMapper = bookMapper;
     }
 
     @RequestMapping(value = {"/book", "/book/list"})
@@ -54,5 +58,27 @@ public class BookViewController {
         }
 
         return "author/list";
+    }
+    @GetMapping
+    @RequestMapping("/book/new")
+    public String newBook(Model model){
+        model.addAttribute("book", new BookDTO());
+        return "book/addedit";
+    }
+
+    @PostMapping("book/")
+    public String saveOrUpdate(@ModelAttribute BookDTO bookDTO){
+
+        Optional<Book> bookOptional = bookRepository.getFirstByTitleAndPublishYear(bookDTO.getTitle(), bookDTO.getPublishYear());
+
+        if (!bookOptional.isPresent()) {
+            Book detachedBook = bookMapper.bookDTOToBook(bookDTO);
+            Book savedBook = bookRepository.save(detachedBook);
+            return "redirect:/book/" + savedBook.getId() + "/show";
+        } else {
+            //TODO: error message to template
+            System.out.println("Sorry, there's such book in db");
+            return "redirect:/book/" + bookOptional.get().getId() + "/show";
+        }
     }
 }

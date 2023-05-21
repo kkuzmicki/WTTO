@@ -1,5 +1,8 @@
 package com.example.libraryapplication.controller;
 
+import com.example.libraryapplication.api.mapper.ReaderMapper;
+import com.example.libraryapplication.api.model.AuthorDTO;
+import com.example.libraryapplication.api.model.ReaderDTO;
 import com.example.libraryapplication.domain.Author;
 import com.example.libraryapplication.domain.Reader;
 import com.example.libraryapplication.repositories.LibraryRepository;
@@ -16,10 +19,12 @@ public class ReaderViewController {
 
     private ReaderRepository readerRepository;
     private LibraryRepository libraryRepository;
+    private ReaderMapper readerMapper;
 
-    public ReaderViewController(ReaderRepository readerRepository, LibraryRepository libraryRepository) {
+    public ReaderViewController(ReaderRepository readerRepository, LibraryRepository libraryRepository, ReaderMapper readerMapper) {
         this.readerRepository = readerRepository;
         this.libraryRepository = libraryRepository;
+        this.readerMapper = readerMapper;
     }
 
     @RequestMapping(value = {"/reader", "/reader/list"})
@@ -53,5 +58,27 @@ public class ReaderViewController {
         }
 
         return "library/list";
+    }
+    @GetMapping
+    @RequestMapping("/reader/new")
+    public String newReader(Model model){
+        model.addAttribute("reader", new ReaderDTO());
+        return "reader/addedit";
+    }
+
+    @PostMapping("reader/")
+    public String saveOrUpdate(@ModelAttribute ReaderDTO readerDTO){
+
+        Optional<Reader> readerOptional = readerRepository.getFirstByFirstNameAndLastName(readerDTO.getFirstName(), readerDTO.getLastName());
+
+        if (!readerOptional.isPresent()) {
+            Reader detachedReader = readerMapper.readerDTOToReader(readerDTO);
+            Reader savedReader = readerRepository.save(detachedReader);
+            return "redirect:/reader/" + savedReader.getId() + "/show";
+        } else {
+            //TODO: error message to template
+            System.out.println("Sorry, there's such reader in db");
+            return "redirect:/reader/" + readerOptional.get().getId() + "/show";
+        }
     }
 }
